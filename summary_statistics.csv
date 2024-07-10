@@ -1,0 +1,7 @@
+ Ship Mode,  Segment,  Country,    City,   State, Postal Code,   Region,  Category,Sub-Category,    Sales,   Quantity,   Discount,    Profit
+Length:9977       ,Length:9977       ,Length:9977       ,Length:9977       ,Length:9977       ,Min.   : 1040  ,Length:9977       ,Length:9977       ,Length:9977       ,Min.   :    0.444  ,Min.   : 1.000  ,Min.   :0.0000  ,Min.   :-6599.978  
+Class :character  ,Class :character  ,Class :character  ,Class :character  ,Class :character  ,1st Qu.:23223  ,Class :character  ,Class :character  ,Class :character  ,1st Qu.:   17.300  ,1st Qu.: 2.000  ,1st Qu.:0.0000  ,1st Qu.:    1.726  
+Mode  :character  ,Mode  :character  ,Mode  :character  ,Mode  :character  ,Mode  :character  ,Median :55901  ,Mode  :character  ,Mode  :character  ,Mode  :character  ,Median :   54.816  ,Median : 3.000  ,Median :0.2000  ,Median :    8.671  
+NA,NA,NA,NA,NA,Mean   :55155  ,NA,NA,NA,Mean   :  230.149  ,Mean   : 3.791  ,Mean   :0.1563  ,Mean   :   28.690  
+NA,NA,NA,NA,NA,3rd Qu.:90008  ,NA,NA,NA,3rd Qu.:  209.970  ,3rd Qu.: 5.000  ,3rd Qu.:0.2000  ,3rd Qu.:   29.372  
+NA,NA,NA,NA,NA,Max.   :99301  ,NA,NA,NA,Max.   :22638.480  ,Max.   :14.000  ,Max.   :0.8000  ,Max.   : 8399.976  

@@ -1,0 +1,158 @@
+---
+title: "Exploratory Data Analysis of Sample Superstore"
+author: "Monone Damilola"
+date: "`r Sys.Date()`"
+output: html_document
+runtime: shiny
+---
+
+# Introduction
+
+This report presents an exploratory data analysis (EDA) of the "Sample Superstore" dataset. The dataset includes information about sales, profits, and regions of a retail business.
+
+# Install and load packages
+
+```{r install and load packages}
+installed.packages("pacman")
+library(pacman)
+pacman::p_load(tidyverse,
+               janitor,
+               rstatix,
+               flextable,
+               ggplot2,
+               dplyr,
+               corrplot,
+               tidyr,
+               readxl)
+```
+
+```{r Load the dataset}
+library(readxl)
+Super_store <- read_excel("Super_store.xlsx")
+View(Super_store)
+```
+# Initial Data exploration`
+```{r Data Exploration}
+head(Super_store)
+summary(Super_store)
+print(summary(Super_store))
+str(Super_store)
+```
+#Data Cleaning
+```{r Data cleaning}
+colSums(is.na(Super_store))
+Super_store <- Super_store[!duplicated(Super_store), ]
+```
+## Univariate Analysis
+```{r Distribution of Sales}
+ggplot(Super_store, aes(Sales)) + 
+  geom_histogram(bins = 30, fill = "blue", color = "black") +
+  ggtitle("Distribution of Sales")
+```
+
+```{r Distribution of Profit}
+ggplot(Super_store, aes(Profit)) + 
+  geom_histogram(bins = 30, fill = "green", color = "black") +
+  ggtitle("Distribution of Profit")
+```
+
+```{r Summary by Category}
+sales_summary<-Super_store %>% 
+  group_by(Category) %>% 
+  summarise(Total_Sales = sum(Sales), Total_Profit = sum(Profit)) %>%
+  arrange(desc(Total_Sales))
+print(sales_summary)
+```
+
+## Bivariate Analysis
+
+```{r Sales vs. Profit}
+ggplot(Super_store, aes(x = Sales, y = Profit)) + 
+  geom_point(alpha = 0.5, color = "red") + 
+  ggtitle("Sales vs. Profit")
+```
+
+```{r Sales and Profit by Category}
+ggplot(Super_store, aes(x = Category, y = Sales, fill = Category)) + 
+  geom_bar(stat = "identity") + 
+  ggtitle("Sales by Category") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+```{r Profit by category}
+ggplot(Super_store, aes(x = Category, y = Profit, fill = Category)) + 
+  geom_bar(stat = "identity") + 
+  ggtitle("Profit by Category") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## Geographical Analysis
+```{r Sales by State}
+Super_store %>% 
+  group_by(State) %>% 
+  summarise(Total_Sales = sum(Sales), Total_Profit = sum(Profit)) %>%
+  arrange(desc(Total_Sales)) %>%
+  ggplot(aes(x = reorder(State, Total_Sales), y = Total_Sales, fill = Total_Sales)) +
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  ggtitle("Total Sales by State")
+```
+```{r Profit by Region}
+ggplot(Super_store, aes(x = Region, y = Profit, fill = Region)) + 
+  geom_bar(stat = "identity") + 
+  ggtitle("Profit by Region")
+```
+## Correlation Analysis
+```{r Correlation matrix}
+numeric_cols <- Super_store %>% select(Sales, Quantity, Discount, Profit)
+cor_matrix <- cor(numeric_cols)
+corrplot(cor_matrix, method = "circle")
+```
+## Find Insights
+```{r Identify top categories}
+Super_store %>% 
+  group_by(Category) %>% 
+  summarise(Total_Sales = sum(Sales), Total_Profit = sum(Profit)) %>%
+  arrange(desc(Total_Sales)) %>%
+  head(10)
+
+Super_store %>% 
+  group_by(`Sub-Category`) %>% 
+  summarise(Total_Sales = sum(Sales), Total_Profit = sum(Profit)) %>%
+  arrange(desc(Total_Sales)) %>%
+  head(10)
+```
+
+## Conclusion
+The exploratory data analysis of the "Sample Superstore" dataset reveals significant insights into sales performance, geographical trends, and potential areas for business improvement. Here are the key insights revealed from the exploratory data analysis (EDA) of the "SampleSuperstore" dataset:
+
+1. Sales and Profit Analysis
+Distribution: Sales and profit distributions are highly skewed. Most transactions fall into lower sales and profit ranges, indicating a large number of small-value transactions.
+Top Categories: Office Supplies generates the highest sales, followed by Furniture and Technology. However, Technology yields the highest profit margin despite lower total sales compared to Office Supplies.
+Profitability Issues: Some products have high sales but low profitability, likely due to high discount rates or low margins.
+2. Category and Sub-Category Performance
+Office Supplies: Generates substantial revenue with consistent performance across sub-categories like Binders, Paper, and Storage.
+Furniture: Shows a wide range in both sales and profitability, with high sales in Chairs and Tables but varying profit margins.
+Technology: High profitability driven by items like Copiers, Phones, and Accessories. Sub-categories such as Machines have high sales and profit margins.
+3. Geographical Analysis
+Regional Performance: The West region leads in both sales and profit, followed by the East. The Central region lags in profitability despite decent sales.
+State Analysis: States like California, New York, and Texas are top performers in sales and profit. However, states like Texas show discrepancies where high sales do not correspond to equally high profits, indicating possible issues with costs or discounts.
+Underperforming Areas: The South region and some states within this region have lower sales and profit, which could indicate potential areas for targeted marketing or operational improvements.
+4. Discount Impact
+Negative Impact: Higher discount rates generally correlate with lower profits, which is evident in scatter plots showing a negative relationship between discount and profit.
+Optimal Pricing: There’s a need for a balanced pricing strategy to maximize profitability without overly relying on discounts.
+5. Correlation Analysis
+Sales and Profit: Strong positive correlation between sales and profit, indicating that higher sales volumes tend to contribute to higher profits.
+Quantity and Profit: Mixed correlation between quantity and profit, suggesting that simply increasing the quantity sold doesn’t always lead to higher profitability, likely due to discounts or costs involved.
+6. Product Performance
+Star Products: Some products stand out in both high sales and high profit, like certain technology items. These should be prioritized for promotions.
+Lagging Products: Items with low sales and low profit need reevaluation for potential phase-out or improved marketing strategies.
+7. Operational Insights
+Shipping Costs: High shipping costs for some regions or products could be impacting overall profitability. Addressing logistics could improve margins.
+Order Trends: Analysis of order trends can help in forecasting demand and optimizing supply chain management.
+Recommendations:
+Focus on High-Profit Items: Prioritize high-profit sub-categories and products for promotion and inventory stocking.
+Optimize Discount Strategy: Reevaluate discount policies to find a balance that maximizes sales without eroding profit margins.
+Targeted Marketing: Develop targeted marketing strategies for underperforming regions and product categories.
+Operational Improvements: Address logistical issues and high shipping costs to enhance profitability in lower-performing areas.
+These insights can help guide strategic decisions, optimize operations, and improve overall business performance.
